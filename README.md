@@ -1,2 +1,2 @@
-# Chess_knight_move
+# Chess-knight-move
 Chess knight game 
