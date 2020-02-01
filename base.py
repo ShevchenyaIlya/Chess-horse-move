@@ -45,3 +45,10 @@ class Grid:
         self.draw_vertical_line(surface)
         self.fill_cells(surface)
 
+
+class ChessHorse:
+    def __init__(self):
+        self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
+
+    def draw(self, surface):
+        surface.blit(self.image, (225, 225))
