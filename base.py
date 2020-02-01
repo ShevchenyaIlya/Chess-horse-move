@@ -51,12 +51,34 @@ class ChessHorse:
         self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
         self.start_pos = (3, 3)
         self.current_pos = (3, 3)
+        self.possible_steps = []
+        self.is_active = False
 
     def change_pos(self, x, y):
         self.current_pos = (x, y)
+        self.is_active = False
 
     def draw(self, surface):
         surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
+
+    def draw_frame(self, surface):
+        pygame.draw.rect(surface, (0, 125, 0), (self.current_pos[0] * 75, self.current_pos[1] * 75, 75, 75), 2)
+
+    def click_horse_handler(self, surface):
+        if self.is_active:
+            self.is_active = False
+        else:
+            self.is_active = True
+
+    def get_possible_steps(self):
+        possible_horse_steps = [(2, 1), (2, -1),
+                                (-2, 1), (-2, -1),
+                                (1, 2), (1, -2),
+                                (-1, 2), (-1, -2)]
+        if self.is_active:
+            for test in possible_horse_steps:
+                if 0 <= self.current_pos[0] + test[0] < 8 and 0 <= self.current_pos[1] + test[1] < 8:
+                    self.possible_steps.append((self.current_pos[0] + test[0], self.current_pos[1] + test[1]))
 
 
 class Grid:

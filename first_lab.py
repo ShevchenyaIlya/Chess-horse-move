@@ -16,6 +16,8 @@ def stand_color():
     surface.fill((255, 255, 255))
     grid.draw(surface)
     horse.draw(surface)
+    if horse.is_active:
+        horse.draw_frame(surface)
     pygame.display.flip()
 
 
@@ -31,8 +33,12 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     pos = pygame.mouse.get_pos()
-                    horse.change_pos(pos[0] // 75, pos[1] // 75)
-                    horse.draw(surface)
+                    if (pos[0] // 75, pos[1] // 75) == horse.current_pos:
+                        horse.click_horse_handler(surface)
+                    else:
+                        if horse.is_active:
+                            horse.change_pos(pos[0] // 75, pos[1] // 75)
+                            horse.draw(surface)
 
         stand_color()
     pygame.quit()
