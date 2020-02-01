@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 class ChessBoard:
@@ -53,6 +54,7 @@ class ChessHorse:
         self.current_pos = (3, 3)
         self.possible_steps = []
         self.is_active = False
+        self.player = "user"
 
     def change_pos(self, x, y, cell):
         if (x, y) in self.possible_steps and (x, y) in cell.active_cells:
@@ -60,6 +62,7 @@ class ChessHorse:
             cell.count_of_steps += 1
             self.current_pos = (x, y)
             self.is_active = False
+            self.player = "computer"
 
     def draw(self, surface):
         surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
@@ -82,19 +85,39 @@ class ChessHorse:
                                 (1, 2), (1, -2),
                                 (-1, 2), (-1, -2)]
         self.possible_steps.clear()
-        if self.is_active:
+        if self.is_active or self.player == "computer":
             for test in possible_horse_steps:
                 if 0 <= self.current_pos[0] + test[0] < 8 and 0 <= self.current_pos[1] + test[1] < 8:
                     self.possible_steps.append((self.current_pos[0] + test[0], self.current_pos[1] + test[1]))
+
+    def auto_step(self, cell, surface):
+        ready_steps = []
+
+        self.get_possible_steps()
+
+        for step in self.possible_steps:
+            if step in cell.active_cells:
+                ready_steps.append(step)
+
+        if len(ready_steps):
+            random_choice = random.choice(ready_steps)
+            cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
+            cell.count_of_steps += 1
+            self.current_pos = (random_choice[0], random_choice[1])
+            print(self.current_pos)
+
+        self.player = "user"
 
 
 class Grid:
     def __init__(self):
         self.active_cells = []
         self.forbidden_cells = []
+
         for i in range(8):
             for j in range(8):
                 self.active_cells.append((j, i))
+
         self.horse_pos = (3, 3)
         self.forbidden_cells.append(self.horse_pos)
         self.count_of_steps = 0
@@ -116,8 +139,8 @@ class Grid:
         else:
             return False
 
-    def show_forbidden_cell(self, surface):
+    def show_forbidden_cell(self, surface, color):
         for cell in self.forbidden_cells:
-            pygame.draw.rect(surface, (0, 0, 0), (cell[0] * 75, cell[1] * 75, 75, 75), 3)
-            pygame.draw.line(surface, (0, 0, 0), (cell[0] * 75, cell[1] * 75), (cell[0] * 75 + 75, cell[1] * 75 + 75), 3)
-            pygame.draw.line(surface, (0, 0, 0), (cell[0] * 75 + 75, cell[1] * 75), (cell[0] * 75, cell[1] * 75 + 75), 3)
+            pygame.draw.rect(surface, color, (cell[0] * 75, cell[1] * 75, 75, 75), 3)
+            pygame.draw.line(surface, color, (cell[0] * 75, cell[1] * 75), (cell[0] * 75 + 75, cell[1] * 75 + 75), 3)
+            pygame.draw.line(surface, color, (cell[0] * 75 + 75, cell[1] * 75), (cell[0] * 75, cell[1] * 75 + 75), 3)
