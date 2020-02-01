@@ -35,6 +35,7 @@ def main():
                     pos = pygame.mouse.get_pos()
                     if (pos[0] // 75, pos[1] // 75) == horse.current_pos:
                         horse.click_horse_handler(surface)
+                        horse.get_possible_steps()
                     else:
                         if horse.is_active:
                             horse.change_pos(pos[0] // 75, pos[1] // 75)

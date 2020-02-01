@@ -55,14 +55,17 @@ class ChessHorse:
         self.is_active = False
 
     def change_pos(self, x, y):
-        self.current_pos = (x, y)
-        self.is_active = False
+        if (x, y) in self.possible_steps:
+            self.current_pos = (x, y)
+            self.is_active = False
 
     def draw(self, surface):
         surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
 
     def draw_frame(self, surface):
-        pygame.draw.rect(surface, (0, 125, 0), (self.current_pos[0] * 75, self.current_pos[1] * 75, 75, 75), 2)
+        pygame.draw.rect(surface, (181, 0, 24), (self.current_pos[0] * 75, self.current_pos[1] * 75, 75, 75), 4)
+        for step in self.possible_steps:
+            pygame.draw.rect(surface, (0, 100, 0), (step[0] * 75, step[1] * 75, 75, 75), 4)
 
     def click_horse_handler(self, surface):
         if self.is_active:
@@ -75,6 +78,7 @@ class ChessHorse:
                                 (-2, 1), (-2, -1),
                                 (1, 2), (1, -2),
                                 (-1, 2), (-1, -2)]
+        self.possible_steps.clear()
         if self.is_active:
             for test in possible_horse_steps:
                 if 0 <= self.current_pos[0] + test[0] < 8 and 0 <= self.current_pos[1] + test[1] < 8:
