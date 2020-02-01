@@ -18,3 +18,6 @@ class Grid:
                                     ((450, 0), (450, 600)),
                                     ((525, 0), (525, 600))]
 
+    def draw(self, surface):
+        for line in self.grid_horizontal_lines:
+            pygame.draw.line(surface, (200, 200, 200), line[0], line[1], 2)
