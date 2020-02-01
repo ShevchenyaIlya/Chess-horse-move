@@ -51,11 +51,13 @@ def main():
                             horse.change_pos(pos[0] // 75, pos[1] // 75, cells)
                             horse.draw(surface)
                             horse.auto_step(cells, surface)
+
                 case = horse.check_end(cells)
                 if case == "restart":
                     restart_game()
                 elif case == "quit":
                     running = False
+
         stand_color()
     pygame.quit()
 

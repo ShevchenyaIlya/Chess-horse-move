@@ -50,10 +50,10 @@ class ChessBoard:
 
 
 def restart(message):
-    tkinter.Tk().wm_withdraw()
-    message = messagebox.askquestion(message, "Do you want to restart?")
-    if message == 'yes':
-        tkinter.Tk().quit()
+    root = tkinter.Tk()
+    root.wm_withdraw()
+    message = messagebox.askyesno(message, "Do you want to restart?")
+    if message:
         return "restart"
     else:
         return "quit"
