@@ -1,7 +1,7 @@
 import pygame
 
 
-class Grid:
+class ChessBoard:
     def __init__(self):
         self.grid_horizontal_lines = [((0, 75), (600, 75)),
                                       ((0, 150), (600, 150)),
@@ -49,6 +49,28 @@ class Grid:
 class ChessHorse:
     def __init__(self):
         self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
+        self.start_pos = (3, 3)
 
     def draw(self, surface):
-        surface.blit(self.image, (225, 225))
+        surface.blit(self.image, (self.start_pos[0] * 75, self.start_pos[1] * 75))
+
+
+class Grid:
+    def __init__(self):
+        self.active_cells = []
+        self.forbidden_cells = []
+        for i in range(8):
+            for j in range(8):
+                self.active_cells.append((j, i))
+        self.horse_pos = (3, 3)
+        self.active_cells.remove(self.horse_pos)
+        self.forbidden_cells.append(self.horse_pos)
+
+    def show(self):
+        for cell in self.active_cells:
+            print(cell[0], cell[1])
+
+    def new_horse_pos(self, x_coord, y_coord):
+        self.horse_pos = (x_coord, y_coord)
+        self.active_cells.remove((x_coord, y_coord))
+        self.forbidden_cells.append((x_coord, y_coord))
