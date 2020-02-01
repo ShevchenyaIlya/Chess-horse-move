@@ -50,9 +50,13 @@ class ChessHorse:
     def __init__(self):
         self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
         self.start_pos = (3, 3)
+        self.current_pos = (3, 3)
+
+    def change_pos(self, x, y):
+        self.current_pos = (x, y)
 
     def draw(self, surface):
-        surface.blit(self.image, (self.start_pos[0] * 75, self.start_pos[1] * 75))
+        surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
 
 
 class Grid:
@@ -74,3 +78,11 @@ class Grid:
         self.horse_pos = (x_coord, y_coord)
         self.active_cells.remove((x_coord, y_coord))
         self.forbidden_cells.append((x_coord, y_coord))
+
+    def is_possible_step(self, x_coord, y_coord):
+        step = (x_coord, y_coord)
+        for cell in self.active_cells:
+            if cell == step:
+                return True
+        else:
+            return False
