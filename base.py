@@ -54,18 +54,21 @@ class ChessHorse:
         self.possible_steps = []
         self.is_active = False
 
-    def change_pos(self, x, y):
-        if (x, y) in self.possible_steps:
+    def change_pos(self, x, y, cell):
+        if (x, y) in self.possible_steps and (x, y) in cell.active_cells:
+            cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
+            cell.count_of_steps += 1
             self.current_pos = (x, y)
             self.is_active = False
 
     def draw(self, surface):
         surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
 
-    def draw_frame(self, surface):
+    def draw_frame(self, surface, cell):
         pygame.draw.rect(surface, (181, 0, 24), (self.current_pos[0] * 75, self.current_pos[1] * 75, 75, 75), 4)
         for step in self.possible_steps:
-            pygame.draw.rect(surface, (0, 100, 0), (step[0] * 75, step[1] * 75, 75, 75), 4)
+            if step in cell.active_cells:
+                pygame.draw.rect(surface, (0, 100, 0), (step[0] * 75, step[1] * 75, 75, 75), 4)
 
     def click_horse_handler(self, surface):
         if self.is_active:
@@ -93,8 +96,8 @@ class Grid:
             for j in range(8):
                 self.active_cells.append((j, i))
         self.horse_pos = (3, 3)
-        self.active_cells.remove(self.horse_pos)
         self.forbidden_cells.append(self.horse_pos)
+        self.count_of_steps = 0
 
     def show(self):
         for cell in self.active_cells:
@@ -112,3 +115,9 @@ class Grid:
                 return True
         else:
             return False
+
+    def show_forbidden_cell(self, surface):
+        for cell in self.forbidden_cells:
+            pygame.draw.rect(surface, (0, 0, 0), (cell[0] * 75, cell[1] * 75, 75, 75), 3)
+            pygame.draw.line(surface, (0, 0, 0), (cell[0] * 75, cell[1] * 75), (cell[0] * 75 + 75, cell[1] * 75 + 75), 3)
+            pygame.draw.line(surface, (0, 0, 0), (cell[0] * 75 + 75, cell[1] * 75), (cell[0] * 75, cell[1] * 75 + 75), 3)

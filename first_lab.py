@@ -16,8 +16,11 @@ def stand_color():
     surface.fill((255, 255, 255))
     grid.draw(surface)
     horse.draw(surface)
+    if cells.count_of_steps:
+        cells.show_forbidden_cell(surface)
     if horse.is_active:
-        horse.draw_frame(surface)
+        horse.draw_frame(surface, cells)
+
     pygame.display.flip()
 
 
@@ -38,7 +41,7 @@ def main():
                         horse.get_possible_steps()
                     else:
                         if horse.is_active:
-                            horse.change_pos(pos[0] // 75, pos[1] // 75)
+                            horse.change_pos(pos[0] // 75, pos[1] // 75, cells)
                             horse.draw(surface)
 
         stand_color()
@@ -46,4 +49,3 @@ def main():
 
 
 main()
-# print(pos[0] // 75, pos[1] // 75)
