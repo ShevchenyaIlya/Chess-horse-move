@@ -11,6 +11,7 @@ grid = Grid()
 running = True
 
 while running:
+    pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -18,3 +19,5 @@ while running:
     surface.fill((0, 0, 0))
     grid.draw(surface)
     pygame.display.flip()
+
+pygame.quit()

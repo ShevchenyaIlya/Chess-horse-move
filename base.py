@@ -26,6 +26,22 @@ class Grid:
         for line in self.grid_vertical_lines:
             pygame.draw.line(surface, (200, 200, 200), line[0], line[1], 2)
 
+    def fill_cells(self, surface):
+        x, y = 75, 0
+        width = 75
+        height = 75
+        for lines in range(8):
+            if lines % 2 == 1:
+                x = 0
+            else:
+                x = 75
+            for rect_ in range(4):
+                pygame.draw.rect(surface, (175, 0, 245), (x, y, width, height))
+                x += 150
+            y += 75
+
     def draw(self, surface):
         self.draw_horizontal_line(surface)
         self.draw_vertical_line(surface)
+        self.fill_cells(surface)
+
