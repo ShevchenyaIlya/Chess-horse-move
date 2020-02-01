@@ -1,5 +1,7 @@
 import pygame
 import random
+from tkinter import messagebox
+import tkinter
 
 
 class ChessBoard:
@@ -47,9 +49,20 @@ class ChessBoard:
         self.fill_cells(surface)
 
 
+def restart(message):
+    tkinter.Tk().wm_withdraw()
+    message = messagebox.askquestion(message, "Do you want to restart?")
+    if message == 'yes':
+        tkinter.Tk().quit()
+        return "restart"
+    else:
+        return "quit"
+
+
 class ChessHorse:
     def __init__(self):
         self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
+        self.is_start = False
         self.start_pos = (3, 3)
         self.current_pos = (3, 3)
         self.possible_steps = []
@@ -57,12 +70,13 @@ class ChessHorse:
         self.player = "user"
 
     def change_pos(self, x, y, cell):
-        if (x, y) in self.possible_steps and (x, y) in cell.active_cells:
-            cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
-            cell.count_of_steps += 1
-            self.current_pos = (x, y)
-            self.is_active = False
-            self.player = "computer"
+        if self.player == "user":
+            if (x, y) in self.possible_steps and (x, y) in cell.active_cells:
+                cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
+                cell.count_of_steps += 1
+                self.current_pos = (x, y)
+                self.is_active = False
+                self.player = "computer"
 
     def draw(self, surface):
         surface.blit(self.image, (self.current_pos[0] * 75, self.current_pos[1] * 75))
@@ -91,22 +105,33 @@ class ChessHorse:
                     self.possible_steps.append((self.current_pos[0] + test[0], self.current_pos[1] + test[1]))
 
     def auto_step(self, cell, surface):
-        ready_steps = []
+        if self.player == "computer":
+            ready_steps = []
 
-        self.get_possible_steps()
+            self.get_possible_steps()
 
+            for step in self.possible_steps:
+                if step in cell.active_cells:
+                    ready_steps.append(step)
+
+            if len(ready_steps):
+                random_choice = random.choice(ready_steps)
+                cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
+                cell.count_of_steps += 1
+                self.current_pos = (random_choice[0], random_choice[1])
+                self.player = "user"
+
+    def check_end(self, cell):
+        mb_end = []
         for step in self.possible_steps:
             if step in cell.active_cells:
-                ready_steps.append(step)
-
-        if len(ready_steps):
-            random_choice = random.choice(ready_steps)
-            cell.new_horse_pos(self.current_pos[0], self.current_pos[1])
-            cell.count_of_steps += 1
-            self.current_pos = (random_choice[0], random_choice[1])
-            print(self.current_pos)
-
-        self.player = "user"
+                mb_end.append(step)
+        if self.is_active:
+            if not len(mb_end):
+                if self.player == "user":
+                    return restart("Sorry, but you loser!!!")
+                elif self.player == "computer":
+                    return restart("Congratulations, now you winner!!!")
 
 
 class Grid:
@@ -144,3 +169,4 @@ class Grid:
             pygame.draw.rect(surface, color, (cell[0] * 75, cell[1] * 75, 75, 75), 3)
             pygame.draw.line(surface, color, (cell[0] * 75, cell[1] * 75), (cell[0] * 75 + 75, cell[1] * 75 + 75), 3)
             pygame.draw.line(surface, color, (cell[0] * 75 + 75, cell[1] * 75), (cell[0] * 75, cell[1] * 75 + 75), 3)
+

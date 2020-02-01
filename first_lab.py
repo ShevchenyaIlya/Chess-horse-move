@@ -1,4 +1,5 @@
 import pygame
+import tkinter
 from laboratory.base import ChessBoard, ChessHorse, Grid
 import os
 os.environ["SDL_VIDEO_WINDOW_POS"] = "400, 100"
@@ -24,12 +25,18 @@ def stand_color():
     pygame.display.flip()
 
 
+def restart_game():
+    global grid, horse, cells
+    del grid, horse, cells
+    grid = ChessBoard()
+    horse = ChessHorse()
+    cells = Grid()
+
+
 def main():
     running = True
 
     while running:
-        pygame.time.delay(10)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -44,7 +51,11 @@ def main():
                             horse.change_pos(pos[0] // 75, pos[1] // 75, cells)
                             horse.draw(surface)
                             horse.auto_step(cells, surface)
-
+                case = horse.check_end(cells)
+                if case == "restart":
+                    restart_game()
+                elif case == "quit":
+                    running = False
         stand_color()
     pygame.quit()
 
