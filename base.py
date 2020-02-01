@@ -5,6 +5,8 @@ import tkinter
 
 
 class ChessBoard:
+    """Basic class for work field, which init chess board"""
+
     def __init__(self):
         self.grid_horizontal_lines = [((0, 75), (600, 75)),
                                       ((0, 150), (600, 150)),
@@ -50,6 +52,8 @@ class ChessBoard:
 
 
 def restart(message):
+    """Function for pushing yes/no message box and creating choice of next activity: restart game or quit game."""
+
     root = tkinter.Tk()
     root.wm_withdraw()
     message = messagebox.askyesno(message, "Do you want to restart?")
@@ -60,6 +64,8 @@ def restart(message):
 
 
 class ChessHorse:
+    """Class of chess horse - active object, which is able to do steps, by clicking in available cells."""
+
     def __init__(self):
         self.image = pygame.image.load(r'/home/shevchenya/Software/ChessHorse.png')
         self.is_start = False
@@ -67,7 +73,7 @@ class ChessHorse:
         self.current_pos = (3, 3)
         self.possible_steps = []
         self.is_active = False
-        self.player = "user"
+        self.player = "user"  # Two branches: "user" or "computer"
 
     def change_pos(self, x, y, cell):
         if self.player == "user":
@@ -135,6 +141,8 @@ class ChessHorse:
 
 
 class Grid:
+    """Abstract grid which follow by horse steps, active cells, available cells in current position."""
+
     def __init__(self):
         self.active_cells = []
         self.forbidden_cells = []
@@ -169,4 +177,3 @@ class Grid:
             pygame.draw.rect(surface, color, (cell[0] * 75, cell[1] * 75, 75, 75), 3)
             pygame.draw.line(surface, color, (cell[0] * 75, cell[1] * 75), (cell[0] * 75 + 75, cell[1] * 75 + 75), 3)
             pygame.draw.line(surface, color, (cell[0] * 75 + 75, cell[1] * 75), (cell[0] * 75, cell[1] * 75 + 75), 3)
-

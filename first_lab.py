@@ -1,5 +1,4 @@
 import pygame
-import tkinter
 from laboratory.base import ChessBoard, ChessHorse, Grid
 import os
 os.environ["SDL_VIDEO_WINDOW_POS"] = "400, 100"
